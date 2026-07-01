@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sclog_lite"
+version = "0.1.0"
+description = "A lightweight logging extension based on loguru with isolated async pooled MySQL batch writing"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+authors = [
+    {name = "Ashida", email = "ashida@example.com"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "loguru>=0.7.3",
+    "pymysql>=1.2.0",
+    "dbutils>=3.1.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-mock>=3.15.1",
+    "pytest-asyncio>=0.26.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sclog_lite*"]
