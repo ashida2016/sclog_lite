@@ -13,9 +13,10 @@ from typing import Any, Callable, Dict, Optional, Tuple, Union
 from loguru import logger
 
 from .mysql_sink import MySQLSink
+from .pgsql_sink import PgSQLSink
 
 # Re-export loguru's logger directly so users have access to all native features
-__all__ = ["logger", "add_mysql_sink", "setup_logging"]
+__all__ = ["logger", "add_mysql_sink", "add_pgsql_sink", "setup_logging"]
 
 
 def _get_project_root() -> str:
@@ -109,6 +110,83 @@ def add_mysql_sink(
     # We pass the sink object directly to logger.add. Loguru will call
     # sink.write(message) for writing and automatically trigger sink.stop()
     # or sink.close() on termination or removal of this sink.
+    return logger.add(
+        sink,
+        level=level,
+        serialize=False,
+        enqueue=False,
+        **kwargs,
+    )
+
+
+def add_pgsql_sink(
+    host: str,
+    port: int,
+    user: str,
+    password: str,
+    database: str,
+    table_name: str = "log_entries",
+    auto_create_table: bool = True,
+    batch_size: int = 100,
+    batch_interval: float = 1.0,
+    queue_maxsize: int = 10000,
+    queue_block: bool = False,
+    queue_timeout: Optional[float] = None,
+    fallback_path: Optional[str] = None,
+    custom_insert_sql: Optional[str] = None,
+    custom_mapping_func: Optional[Callable[[Dict[str, Any]], Tuple[Any, ...]]] = None,
+    pool_config: Optional[Dict[str, Any]] = None,
+    level: str = "DEBUG",
+    **kwargs: Any,
+) -> int:
+    """Adds a PostgreSQL sink to the global loguru logger.
+
+    Args:
+        host: PostgreSQL host.
+        port: PostgreSQL port.
+        user: PostgreSQL user.
+        password: PostgreSQL password.
+        database: PostgreSQL database name.
+        table_name: Name of the log table. Defaults to "log_entries".
+        auto_create_table: Whether to create the table if it does not exist.
+            Defaults to True.
+        batch_size: Maximum logs in a single SQL executemany batch.
+            Defaults to 100.
+        batch_interval: Seconds to wait before flushing. Defaults to 1.0.
+        queue_maxsize: Max capacity of log queue. Defaults to 10000.
+        queue_block: If True, blocks when queue is full. Defaults to False.
+        queue_timeout: Seconds to wait if queue_block is True. Defaults to None.
+        fallback_path: Log file path to dump logs if PostgreSQL write fails.
+            Defaults to None.
+        custom_insert_sql: Custom INSERT SQL statement. Defaults to None.
+        custom_mapping_func: Custom function to map a loguru record dict to
+            a tuple for SQL execution. Defaults to None.
+        pool_config: Optional configurations for the PooledDB instance.
+        level: Minimum log level for the PostgreSQL sink. Defaults to "DEBUG".
+        **kwargs: Additional parameters passed to loguru's add() method (e.g. format, filter).
+
+    Returns:
+        The sink ID returned by loguru.add().
+    """
+    sink = PgSQLSink(
+        host=host,
+        port=port,
+        user=user,
+        password=password,
+        database=database,
+        table_name=table_name,
+        auto_create_table=auto_create_table,
+        batch_size=batch_size,
+        batch_interval=batch_interval,
+        queue_maxsize=queue_maxsize,
+        queue_block=queue_block,
+        queue_timeout=queue_timeout,
+        fallback_path=fallback_path,
+        custom_insert_sql=custom_insert_sql,
+        custom_mapping_func=custom_mapping_func,
+        pool_config=pool_config,
+    )
+
     return logger.add(
         sink,
         level=level,

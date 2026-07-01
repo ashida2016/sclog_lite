@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sclog_lite"
-version = "0.1.0"
+version = "0.2.0"
 description = "A lightweight logging extension based on loguru with isolated async pooled MySQL batch writing"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -21,6 +21,7 @@ dependencies = [
     "loguru>=0.7.3",
     "pymysql>=1.2.0",
     "dbutils>=3.1.2",
+    "psycopg2-binary>=2.9.12",
 ]
 
 [project.optional-dependencies]
