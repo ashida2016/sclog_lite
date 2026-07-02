@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.abspath('../../src'))
 project = 'sclog_lite'
 copyright = '2026, Ashida.Shi'
 author = 'Ashida.Shi'
-release = '0.2.0'
+release = '0.2.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
