@@ -22,9 +22,12 @@
 # 进入目录后本地安装
 pip install -e .
 ```
+---  
+## 帮助文档
 
----
+[ver0.2.1](https://sclog-lite.readthedocs.io/zh-cn/ver0.2.1/)  
 
+---  
 ## 🚀 快速上手
 
 ### 1. 标准控制台和文件日志输出（与 loguru 体验一致）
