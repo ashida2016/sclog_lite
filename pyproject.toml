@@ -7,7 +7,7 @@ name = "sclog_lite"
 version = "0.2.0"
 description = "A lightweight logging extension based on loguru with isolated async pooled MySQL batch writing"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 license = "MIT"
 authors = [
     {name = "Ashida", email = "ashida@example.com"}
